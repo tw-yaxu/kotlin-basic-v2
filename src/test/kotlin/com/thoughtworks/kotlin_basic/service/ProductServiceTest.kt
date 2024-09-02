@@ -3,9 +3,11 @@ package com.thoughtworks.kotlin_basic.service
 import com.thoughtworks.kotlin_basic.model.Inventory
 import com.thoughtworks.kotlin_basic.model.Product
 import com.thoughtworks.kotlin_basic.model.ProductType
+import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -21,6 +23,11 @@ class ProductServiceTest {
     fun setUp() {
         apiService = mockk()
         productService = ProductService(apiService)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        clearAllMocks()
     }
 
     @Test
