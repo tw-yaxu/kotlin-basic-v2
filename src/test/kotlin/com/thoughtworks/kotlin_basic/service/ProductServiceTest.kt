@@ -9,7 +9,9 @@ import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import retrofit2.Response
+import java.lang.Exception
 
 class ProductServiceTest {
     private lateinit var apiService: ApiService
@@ -43,6 +45,7 @@ class ProductServiceTest {
 
         val result = productService.getAllProductWithInventory()
         assertEquals(1, result.size)
+        assertEquals(110, result[0].stockQuantity)
         assertEquals(20F, result[0].price)
     }
 
@@ -56,6 +59,7 @@ class ProductServiceTest {
 
         val result = productService.getAllProductWithInventory()
         assertEquals(1, result.size)
+        assertEquals(90, result[0].stockQuantity)
         assertEquals(24F, result[0].price)
     }
 
@@ -69,7 +73,13 @@ class ProductServiceTest {
 
         val result = productService.getAllProductWithInventory()
         assertEquals(1, result.size)
+        assertEquals(20, result[0].stockQuantity)
         assertEquals(30F, result[0].price)
+    }
+
+    @Test
+    fun `should throw exception when cannot connect to external service`(): Unit = runBlocking {
+        assertThrows<Exception> { productService.getAllProductWithInventory() }
     }
 
     companion object {
