@@ -7,8 +7,8 @@ import retrofit2.http.GET
 
 interface ApiService {
     @GET("/products")
-    suspend fun getAllProducts(): Call<List<Product>>
+    suspend fun getAllProducts(): List<Product>
 
     @GET("/inventories")
-    suspend fun getAllInventories(): Call<List<Inventory>>
+    suspend fun getAllInventories(): List<Inventory>
 }

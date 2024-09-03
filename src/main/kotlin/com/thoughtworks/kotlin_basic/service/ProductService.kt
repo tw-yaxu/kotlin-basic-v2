@@ -1,18 +1,19 @@
 package com.thoughtworks.kotlin_basic.service
 
+import com.thoughtworks.kotlin_basic.ApiClient
 import com.thoughtworks.kotlin_basic.dto.ProductWithInventoryDTO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 
-class ProductService(private val apiService: ApiService) {
+class ProductService(private val apiClient: ApiClient) {
     suspend fun getAllProductWithInventory(): List<ProductWithInventoryDTO> = withContext(Dispatchers.IO) {
 
-        val productsDeferred = async { apiService.getAllProducts().execute().body() }
-        val inventoriesDeferred = async { apiService.getAllInventories().execute().body() }
+        val productsDeferred = async { apiClient.apiService.getAllProducts() }
+        val inventoriesDeferred = async { apiClient.apiService.getAllInventories() }
 
-        val products = productsDeferred.await() ?: emptyList()
-        val inventories = inventoriesDeferred.await() ?: emptyList()
+        val products = productsDeferred.await()
+        val inventories = inventoriesDeferred.await()
 
         val inventoryQuantityMap = inventories.groupBy { it.SKU }.mapValues { entry -> entry.value.sumOf { it.quantity } }
         val productWithInventoryList:List<ProductWithInventoryDTO> = products.map {

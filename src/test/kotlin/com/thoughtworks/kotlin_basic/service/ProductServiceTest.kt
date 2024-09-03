@@ -1,5 +1,6 @@
 package com.thoughtworks.kotlin_basic.service
 
+import com.thoughtworks.kotlin_basic.ApiClient
 import com.thoughtworks.kotlin_basic.model.Inventory
 import com.thoughtworks.kotlin_basic.model.Product
 import com.thoughtworks.kotlin_basic.model.ProductType
@@ -16,13 +17,13 @@ import retrofit2.Response
 import java.lang.Exception
 
 class ProductServiceTest {
-    private lateinit var apiService: ApiService
+    private lateinit var apiClient: ApiClient
     private lateinit var productService: ProductService
 
     @BeforeEach
     fun setUp() {
-        apiService = mockk()
-        productService = ProductService(apiService)
+        apiClient = mockk()
+        productService = ProductService(apiClient)
     }
 
     @AfterEach
@@ -35,8 +36,8 @@ class ProductServiceTest {
         val mockProducts = listOf(PRODUCT_1, PRODUCT_2)
         val mockInventories = listOf(INVENTORY_1, INVENTORY_2, INVENTORY_3)
 
-        coEvery { apiService.getAllProducts().execute() } returns Response.success(mockProducts)
-        coEvery { apiService.getAllInventories().execute() } returns Response.success(mockInventories)
+        coEvery { apiClient.apiService.getAllProducts() } returns mockProducts
+        coEvery { apiClient.apiService.getAllInventories() } returns mockInventories
 
         val result = productService.getAllProductWithInventory()
         assertEquals(2, result.size)
@@ -47,8 +48,8 @@ class ProductServiceTest {
         val mockProducts = listOf(PRODUCT_2)
         val mockInventories = listOf(INVENTORY_2, INVENTORY_3)
 
-        coEvery { apiService.getAllProducts().execute() } returns Response.success(mockProducts)
-        coEvery { apiService.getAllInventories().execute() } returns Response.success(mockInventories)
+        coEvery { apiClient.apiService.getAllProducts() } returns mockProducts
+        coEvery { apiClient.apiService.getAllInventories() } returns mockInventories
 
         val result = productService.getAllProductWithInventory()
         assertEquals(1, result.size)
@@ -61,8 +62,8 @@ class ProductServiceTest {
         val mockProducts = listOf(PRODUCT_2)
         val mockInventories = listOf(INVENTORY_2)
 
-        coEvery { apiService.getAllProducts().execute() } returns Response.success(mockProducts)
-        coEvery { apiService.getAllInventories().execute() } returns Response.success(mockInventories)
+        coEvery { apiClient.apiService.getAllProducts() } returns mockProducts
+        coEvery { apiClient.apiService.getAllInventories() } returns mockInventories
 
         val result = productService.getAllProductWithInventory()
         assertEquals(1, result.size)
@@ -75,8 +76,8 @@ class ProductServiceTest {
         val mockProducts = listOf(PRODUCT_2)
         val mockInventories = listOf(INVENTORY_3)
 
-        coEvery { apiService.getAllProducts().execute() } returns Response.success(mockProducts)
-        coEvery { apiService.getAllInventories().execute() } returns Response.success(mockInventories)
+        coEvery { apiClient.apiService.getAllProducts() } returns mockProducts
+        coEvery { apiClient.apiService.getAllInventories() } returns mockInventories
 
         val result = productService.getAllProductWithInventory()
         assertEquals(1, result.size)
